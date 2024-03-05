@@ -1,0 +1,20 @@
+---
+- name: Build and Deploy Docker Container
+  hosts: dockerserver
+  gather facts: false
+  remote user: root
+  tasks:
+    - name: Building Docker Image
+      docker_image:
+        name: boxer:latest
+        source: build
+        build:
+          path: /dockerproject
+        state: present
+    - name: Creating the Contener
+      docker container:
+        name: boxer-container
+        image: boxer:latest
+        ports:
+          - 80:80
+        state: started
